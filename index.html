@@ -1,87 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>丁同坤的作品集网站</title>
-    <link rel='stylesheet' href="style.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>OVERWATCH - POTG EXHIBITION</title>
+    <style>
+        :root {
+            --ow-orange: #f99e1a;
+            --ow-blue: #40b2ed;
+            --ow-white: #ffffff;
+            --dark-bg: #12161d;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'BigNoodleTooOblique', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image:
+                radial-gradient(circle at center, rgba(22, 33, 62, 0.8) 0%, #0a0a0c 100%),
+                url('https://www.transparenttextures.com/patterns/hexellence.png');
+            /* 增加蜂巢纹理 */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--ow-white);
+            overflow-x: hidden;
+        }
+
+        /* 入场动画 */
+        @keyframes slideIn {
+            from {
+                transform: skewX(-10deg) translateX(-100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: skewX(-10deg) translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 顶部 Logo 区 */
+        .header-section {
+            text-align: left;
+            margin-bottom: 40px;
+            border-left: 8px solid var(--ow-orange);
+            padding-left: 20px;
+            transform: skewX(-10deg);
+            /* 标志性的斜角设计 */
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .overwatch-logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 0;
+            line-height: 1;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .overwatch-logo span {
+            color: var(--ow-orange);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 视频容器 HUD 化 */
+        .video-container {
+            position: relative;
+            padding: 10px;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+            /* 梯形剪裁 */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 扫描线效果 */
+        .video-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* 卡片布局优化 */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px 20px;
+            position: relative;
+            border-bottom: 4px solid transparent;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .highlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 157, 0, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .highlight-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-10px) scale(1.02);
+            border-bottom: 4px solid var(--ow-orange);
+        }
+
+        .highlight-card:hover::before {
+            left: 100%;
+        }
+
+        .highlight-card h3 {
+            color: var(--ow-orange);
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 响应式微调 */
+        @media (max-width: 768px) {
+            .header-section {
+                transform: none;
+            }
+
+            .video-container {
+                clip-path: none;
+            }
+
+            .overwatch-logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <video class="back-vid" autoplay loop muted plays-inline src="./ZuopinJi_tu/videos/galaxy.mp4">
-
-        </video>
-
-        <div class="cover"></div>
-        <header data-aos="fade-down" data-aos-duration="2000">
-            <div class="left">
-                <img src="./ZuopinJi_tu/images/miladicode.png" alt="'logo">
-                <h2> <span style="color: #72a1dea2;">Hao</span>DuoYv</h2>
-            </div>
-            <ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Skills</a></li>
-                <li><a href="#">Projects</a></li>
-            </ul>
-
-            <div class="box-icons">
-                <p><i class='bx bxl-github'></i></p>
-                <p><i class='bx bxl-tiktok'></i></p>
-                <p><i class='bx bxl-steam'></i></p>
-            </div>
-
-        </header>
-        <div class="blackhole-box" data-aos="fade-down" data-aos-duration="2000">
-            <video autoplay loop muted play-inline src="./ZuopinJi_tu/videos/blackhole.mp4"></video>
+        <div class="header-section">
+            <p class="overwatch-logo">OVER<span>WATCH</span></p>
+            <h1>全场最佳 / POTG</h1>
         </div>
-        <section class="hero">
-            <div class="hero-info" data-aos="fade-right" data-aos-duration="1000">
-                <div class="title">
-                    <i class='bx bxl-sketch'></i>
 
-                    个人 开发 作品集
-                </div>
-                <h1 data-aos="fade-right" data-aos-duration="1000">
-                    有 趣 的
-                    <span class="gradient">编程 项目</span>
-                </h1>
-                <p>不积 <span class="gradient">硅步</span><br>无以 <span class="gradient">至千里</span></p>
-                <button><i class='bx bx-send'>联系我</i></button>
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video controls autoplay muted>
+                    <source src="https://file.uhsea.com/2603/dc3648bc7fdaf762b2d177d1eaf0f9281K.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
             </div>
-            <img data-aos="zoom-in" data-aos-duration="2000" class="astronaut" src="./ZuopinJi_tu/images/astronaut.png"
-                alt="info-img">
-        </section>
-        <section class="about-section">
-            <div class="info-card">
-                <h1>4+</h1>
-                <p>Year of Experience</p>
+        </div>
 
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>⚔️ 终极技能</h3>
+                <p>Q键一响，黄金万两。记录那些改变战局的英雄时刻。</p>
             </div>
-            <div class="info-card">
-                <h1>7+</h1>
-                <p>Technical Skills</p>
-
+            <div class="highlight-card">
+                <h3>🎯 巅峰准星</h3>
+                <p>无论是黑百合的冷酷还是半藏的随缘，每一发子弹都有它的想法。</p>
             </div>
-            <div class="info-card">
-                <h1>4+</h1>
-                <p>Year of Experience</p>
-
+            <div class="highlight-card">
+                <h3>🛡️ 钢铁防线</h3>
+                <p>只要有我在，队友就永远安全。守护也是一种极致的Carry。</p>
             </div>
-            <div class="info-card">
-                <h1>4+</h1>
-                <p>Year of Experience</p>
-
+            <div class="highlight-card">
+                <h3>🌟 传说时刻</h3>
+                <p>这不是运气，这是成千上万次练习后的肌肉记忆。</p>
             </div>
-        </section>
+        </div>
     </div>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>
-        AOS.init();
-    </script>
 </body>
 
 </html>
